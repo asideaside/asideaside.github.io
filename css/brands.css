@@ -609,5 +609,12 @@
 .button-zoom {
 	--button-text:#ffffff;
 	--button-background:#0B5CFF;
-  --button-border:1px solid #FFFFFF;
+    --button-border:1px solid #FFFFFF;
+}
+
+/* Holopass */
+.button-holopass {
+	--button-text:#000000;
+	background-image:linear-gradient(90deg, #68c3e8, #da75a7);
+	--button-border:1px solid #000000;
 }
