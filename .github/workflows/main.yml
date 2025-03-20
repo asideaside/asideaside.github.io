@@ -1,20 +1,33 @@
+name: Deploy Files
+
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+  # Enables manually triggering of Workflow with file synchronization option
+  workflow_dispatch:
+    inputs:
+      sync:
+        description: "File synchronization"
+        required: true
+        default: "delta"
 
 jobs:
-  mirror_with_sftp:
-    name: deploy
+  deploy-main:
+    name: "main branch"
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: SFTP mirror
-        uses: verbindingsfout/sftp-mirror@v1.6
+      - name: "Checkout"
+        uses: actions/checkout@v4
         with:
-            server: ${{ secrets.FTP_SERVER }}
-            port: ${{ secrets.FTP_PORT }} # optional, default is 22
-            user: ${{ secrets.FTP_USERNAME }}
-            password: ${{ secrets.FTP_PASSWORD }}
-            local: ./ # optional, default is ./
-            remote: ${{ secrets.FTP_REMOTE_DIR }} # optional, default is ./
+          fetch-depth: 0
+      - name: "Deploy"
+        uses: milanmk/actions-file-deployer@v1.16
+        with:
+          remote-protocol: "sftp"
+          remote-host: ${{ secrets.FTP_SERVER }}
+          remote-user: ${{ secrets.FTP_USERNAME }}
+          remote-password: ${{ secrets.FTP_PASSWORD }}
+          remote-path: ${{ secrets.FTP_REMOTE_DIR }}
