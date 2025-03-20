@@ -10,7 +10,7 @@ on:
       sync:
         description: "File synchronization"
         required: true
-        default: "delta"
+        default: "full"
 
 jobs:
   deploy-main:
@@ -24,11 +24,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: "Deploy"
-        uses: milanmk/actions-file-deployer@3cf188f493103b5f12f11221186f8fbd07f2be10
+        uses: verbindingsfout/sftp-mirror@v1.6
         with:
-          remote-protocol: "sftp"
-          remote-host: ${{ secrets.FTP_SERVER }}
-          remote-port: ${{ secrets.FTP_PORT}}
-          remote-user: ${{ secrets.FTP_USERNAME }}
-          remote-password: ${{ secrets.FTP_PASSWORD }}
-          remote-path: ${{ secrets.FTP_REMOTE_DIR }}
+          server: ${{ secrets.FTP_SERVER }}
+          port: ${{ secrets.FTP_PORT}}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          remote: ${{ secrets.FTP_REMOTE_DIR }}
